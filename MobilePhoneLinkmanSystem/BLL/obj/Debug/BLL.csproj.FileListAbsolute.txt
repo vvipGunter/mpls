@@ -1,0 +1,7 @@
+D:\MobilePhoneLinkmanSystem\BLL\bin\Debug\BLL.dll
+D:\MobilePhoneLinkmanSystem\BLL\bin\Debug\BLL.pdb
+D:\MobilePhoneLinkmanSystem\BLL\bin\Debug\DAL.dll
+D:\MobilePhoneLinkmanSystem\BLL\bin\Debug\DAL.pdb
+D:\MobilePhoneLinkmanSystem\BLL\obj\Debug\ResolveAssemblyReference.cache
+D:\MobilePhoneLinkmanSystem\BLL\obj\Debug\BLL.dll
+D:\MobilePhoneLinkmanSystem\BLL\obj\Debug\BLL.pdb

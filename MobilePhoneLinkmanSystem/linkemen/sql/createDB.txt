@@ -1,0 +1,26 @@
+﻿-- =============================================
+-- Create database on mulitple filegroups
+-- =============================================
+IF EXISTS (
+  SELECT * 
+    FROM sys.databases 
+   WHERE name = N'gunterMPLMS'
+)
+  DROP DATABASE gunterMPLMS
+GO
+
+CREATE DATABASE gunterMPLMS
+ON PRIMARY
+	(NAME = 'D:\MobilePhoneLinkmanSystem\linkemen\data\maindata.mdf',
+	  FILENAME = N'D:\MobilePhoneLinkmanSystem\linkemen\data\maindata.mdf',
+          SIZE = 10MB,
+          MAXSIZE = 50MB,
+          FILEGROWTH = 10%)
+LOG ON
+	( NAME = 'D:\MobilePhoneLinkmanSystem\linkemen\data\logdata.ldf',
+	  FILENAME = N'D:\MobilePhoneLinkmanSystem\linkemen\data\logdata.ldf',
+          SIZE = 5MB,
+          MAXSIZE = 25MB,
+          FILEGROWTH = 5MB)
+GO
+

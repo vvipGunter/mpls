@@ -1,0 +1,8 @@
+D:\MobilePhoneLinkmanSystem\UsefulAPIs\bin\Debug\UsefulAPIs.exe
+D:\MobilePhoneLinkmanSystem\UsefulAPIs\bin\Debug\UsefulAPIs.pdb
+D:\MobilePhoneLinkmanSystem\UsefulAPIs\obj\Debug\ResolveAssemblyReference.cache
+D:\MobilePhoneLinkmanSystem\UsefulAPIs\obj\Debug\UsefulAPIs.Form1.resources
+D:\MobilePhoneLinkmanSystem\UsefulAPIs\obj\Debug\UsefulAPIs.Properties.Resources.resources
+D:\MobilePhoneLinkmanSystem\UsefulAPIs\obj\Debug\UsefulAPIs.csproj.GenerateResource.Cache
+D:\MobilePhoneLinkmanSystem\UsefulAPIs\obj\Debug\UsefulAPIs.exe
+D:\MobilePhoneLinkmanSystem\UsefulAPIs\obj\Debug\UsefulAPIs.pdb

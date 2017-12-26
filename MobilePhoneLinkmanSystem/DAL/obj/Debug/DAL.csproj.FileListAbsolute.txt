@@ -1,0 +1,5 @@
+D:\MobilePhoneLinkmanSystem\DAL\bin\Debug\DAL.dll
+D:\MobilePhoneLinkmanSystem\DAL\bin\Debug\DAL.pdb
+D:\MobilePhoneLinkmanSystem\DAL\obj\Debug\ResolveAssemblyReference.cache
+D:\MobilePhoneLinkmanSystem\DAL\obj\Debug\DAL.dll
+D:\MobilePhoneLinkmanSystem\DAL\obj\Debug\DAL.pdb

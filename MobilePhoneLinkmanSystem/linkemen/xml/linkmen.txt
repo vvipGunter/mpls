@@ -1,0 +1,301 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Xml;
+using System.Xml.XPath;
+using System.Xml.Xsl;
+using System.Data;
+
+public partial class LinkMenXml : System.Web.UI.Page
+{
+    private XmlDocument doc;
+    XmlNode xmlnode;
+    XmlElement xmlelem;
+    XmlElement xmlelem2;
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!Page.IsPostBack)
+        {
+            CreateXml();
+            loadxml();
+            //Response.Write(doc.InnerText+"<br/>");
+        }
+    }
+    private void CreateXml()
+    {
+        doc = new XmlDocument();
+        //加入XML的声明段落
+        //string xmlnodetype = "<? version='1.0' encoding='UTF-8' standalone='yes' ?>";
+        // XmlNodeType xmlnodetype = new XmlNodeType();
+        xmlnode = doc.CreateNode(XmlNodeType.XmlDeclaration, "", "");
+
+        doc.AppendChild(xmlnode);
+        //加入一个根元素
+
+        xmlelem = doc.CreateElement("", "linkmen", "");
+        doc.AppendChild(xmlelem);
+        //加入另外一个元素
+        xmlelem2 = doc.CreateElement("linkman");
+
+        XmlElement ele3 = doc.CreateElement("id");
+        ele3.InnerText = "1";
+        xmlelem2.AppendChild(ele3);
+
+        XmlElement ele4 = doc.CreateElement("class");
+        ele4.InnerText = "jiben701";
+        xmlelem2.AppendChild(ele4);
+
+        XmlElement ele5 = doc.CreateElement("name");
+        ele5.InnerText = "zhang";
+        xmlelem2.AppendChild(ele5);
+
+
+        XmlElement ele6 = doc.CreateElement("sex");
+        ele6.InnerText = "boy";
+        xmlelem2.AppendChild(ele6);
+
+        XmlElement ele7 = doc.CreateElement("mobilephone");
+        ele7.InnerText = "13508629550";
+        xmlelem2.AppendChild(ele7);
+
+        XmlElement ele8 = doc.CreateElement("familyphone");
+        ele8.InnerText = "123";
+        xmlelem2.AppendChild(ele8);
+
+        XmlElement ele9 = doc.CreateElement("address");
+        ele9.InnerText = "china";
+        xmlelem2.AppendChild(ele9);
+
+        XmlElement ele10 = doc.CreateElement("enterDate");
+        ele10.InnerText = "2008";
+        xmlelem2.AppendChild(ele10);
+
+        XmlElement ele11 = doc.CreateElement("mark");
+        ele11.InnerText = "500";
+        xmlelem2.AppendChild(ele11);
+
+        xmlelem.AppendChild(xmlelem2);
+        doc.ChildNodes.Item(1).AppendChild(xmlelem2);
+        //保存创建好的XML文档
+
+        doc.Save(Server.MapPath("~/xmltest/1.xml"));
+
+    }
+    private void loadxml()
+    {
+        doc = new XmlDocument();
+        doc.Load(Server.MapPath("~/Linkmen.xml"));
+    }
+    protected void viewall_Click(object sender, EventArgs e)
+    {
+        loadxml();
+        XslTransform tran = new XslTransform();
+        tran.Load(Server.MapPath("~/linkmen.xsl"));
+        tran.Transform(Server.MapPath("~/linkmen.xml"), Server.MapPath("~/OtherLinkMenXml.html"));
+        //txtall.Value = doc.DocumentElement.FirstChild.InnerText;
+        //showIt();
+        Response.Redirect("~/OtherLinkMenXml.html");
+        //Server.Transfer("~/OtherLinkMenXml.html");
+    }
+    protected void btnadd_Click(object sender, EventArgs e)
+    {
+        loadxml();
+        if (id.Value.Trim().ToString() == "" || id.Value.Trim().ToString() == null)
+        {
+            Page.ClientScript.RegisterStartupScript(Page.GetType(), "msg", "<script language='javascript'>alert('必须输入ID！');</script>");
+            return;
+        }
+        XmlNode root = doc.DocumentElement;
+        XmlElement linkman = doc.CreateElement("linkman");
+
+        XmlElement id1 = doc.CreateElement("id");
+        id1.InnerText = id.Value.Trim();
+        linkman.AppendChild(id1);
+
+        XmlElement xesub2 = doc.CreateElement("class");
+        xesub2.InnerText = classmy.Value.Trim().ToString();
+        linkman.AppendChild(xesub2);
+
+        XmlElement xesub3 = doc.CreateElement("name");
+        xesub3.InnerText = name.Value.Trim();
+        linkman.AppendChild(xesub3);
+
+        XmlElement xesub4 = doc.CreateElement("sex");
+        xesub4.InnerText = sex.Value.Trim();
+        linkman.AppendChild(xesub4);
+
+        XmlElement xesub5 = doc.CreateElement("mobilephone");
+        xesub5.InnerText = mobilephone.Value.Trim();
+        linkman.AppendChild(xesub5);
+
+        XmlElement xesub6 = doc.CreateElement("familyphone");
+        xesub6.InnerText = familyphone.Value.Trim();
+        linkman.AppendChild(xesub6);
+
+        XmlElement xesub7 = doc.CreateElement("address");
+        xesub7.InnerText = address.Value.Trim();
+        linkman.AppendChild(xesub7);
+
+        XmlElement xesub8 = doc.CreateElement("enterDate");
+        xesub8.InnerText = sex.Value.Trim();
+        linkman.AppendChild(xesub8);
+
+        XmlElement xesub9 = doc.CreateElement("mark");
+        xesub9.InnerText = mark.Value.Trim();
+        linkman.AppendChild(xesub9);
+
+        root.AppendChild(linkman);
+        doc.Save(Server.MapPath("~/linkmen.xml"));
+        Page.ClientScript.RegisterStartupScript(Page.GetType(), "msg", "<script language='javascript' defer>window.alert('新增节点成功！')</script>");
+    }
+    //删除
+    protected void btndelete_Click(object sender, EventArgs e)
+    {
+        loadxml();
+        deleteNode();
+        doc.Save(Server.MapPath("~/linkmen.xml"));
+        Page.ClientScript.RegisterStartupScript(Page.GetType(), "msg", "<script language='javascript' defer>window.alert('已经删除学号为'+'" + id.Value.Trim() + "'+'的节点！')</script>");
+        id.Value = sex.Value = classmy.Value = name.Value = mobilephone.Value = familyphone.Value = address.Value = mark.Value =enterDate.Value= "";
+    }
+
+    //修改
+    protected void btnupdate_Click(object sender, EventArgs e)
+    {
+        loadxml();
+        string searchid = id.Value.Trim().ToString();
+        XmlNodeList xnl = doc.SelectSingleNode("linkmen").ChildNodes;
+        foreach (XmlNode xn in xnl)
+        {
+            XmlElement xe = (XmlElement)xn;
+            if (xe.FirstChild.InnerText == searchid)
+            {
+                XmlNodeList xnlist = xe.ChildNodes;
+                foreach (XmlNode xnode in xnlist)
+                {
+                    XmlElement xele = (XmlElement)xnode;
+                    if (xele.Name == "class")
+                    {
+                        xele.InnerText = classmy.Value.Trim().ToString();
+                        doc.Save(Server.MapPath("~/XMLtest.xml"));
+                        //break;
+                    }
+                    if (xele.Name == "name")
+                    {
+                        xele.InnerText = name.Value.Trim().ToString();
+                        doc.Save(Server.MapPath("~/linkmen.xml"));
+                        //break;
+                    }
+                    if (xele.Name == "sex")
+                    {
+                        xele.InnerText = sex.Value.Trim().ToString();
+                        doc.Save(Server.MapPath("~/linkmen.xml"));
+                        //break;
+                    }
+                    if (xele.Name == "mobilephone")
+                    {
+                        xele.InnerText = mobilephone.Value.Trim().ToString();
+                        doc.Save(Server.MapPath("~/linkmen.xml"));
+                        //break;
+                    }
+                    if (xele.Name == "familyphone")
+                    {
+                        xele.InnerText = familyphone.Value.Trim().ToString();
+                        doc.Save(Server.MapPath("~/linkmen.xml"));
+                        //break;
+                    }
+                    if (xele.Name == "address")
+                    {
+                        xele.InnerText = address.Value.Trim().ToString();
+                        doc.Save(Server.MapPath("~/linkmen.xml"));
+                        //break;
+                    }
+                    if (xele.Name == "enterDate")
+                    {
+                        xele.InnerText = enterDate.Value.Trim().ToString();
+                        doc.Save(Server.MapPath("~/linkmen.xml"));
+                        //break;
+                    }
+                    if (xele.Name == "mark")
+                    {
+                        xele.InnerText = mark.Value.Trim().ToString();
+                        doc.Save(Server.MapPath("~/linkmen.xml"));
+                        //break;
+                    }
+                }
+            }
+        }
+        Page.ClientScript.RegisterStartupScript(Page.GetType(), "msg", "<script language='javascript' defer>window.alert('修改并保存节点成功！')</script>");
+        id.Value=classmy.Value = name.Value = sex.Value =mobilephone.Value= familyphone.Value = address.Value = enterDate.Value = mark.Value = "";
+
+    }
+    private void deleteNode()
+    {
+        loadxml();
+        XmlNode xn = doc.SelectSingleNode("linkmen");
+        XmlNodeList xnl = xn.ChildNodes;
+
+        foreach (XmlNode xn1 in xnl)
+        {
+            XmlElement xe = (XmlElement)xn1;
+            string id1 = id.Value.Trim().ToString();
+            if (xe.FirstChild.InnerText == id1)
+            {
+                xe.ParentNode.RemoveChild(xe);
+                xe.RemoveAll();
+                Page.ClientScript.RegisterStartupScript(Page.GetType(), "msg", "<script language='javascript' defer>window.alert('已经删除学号为'+'" + id1 + "'+'的节点！')</script>");
+                break;
+            }
+
+        }
+        doc.Save(Server.MapPath("~/linkmen.xml"));//保存
+    }
+
+    private void showIt()
+    {
+        loadxml();
+        XmlNode xn = doc.SelectSingleNode("linkmen");
+        XmlNodeList xnl = xn.ChildNodes;
+        foreach (XmlNode xnf in xnl)
+        {
+            XmlElement xe = (XmlElement)xnf;
+            Response.Write(xe.InnerXml + "<br/>");
+            Response.Write(xe.InnerText+"<br/>");
+            //txtall.Value+= xe.InnerText+"<br />";
+        }
+
+    }
+
+    protected void btnSearch_Click(object sender, EventArgs e)
+    {
+        loadxml();
+        XmlNode xn = doc.SelectSingleNode("linkmen");
+        XmlNodeList xnl = xn.ChildNodes;
+        int num = xnl.Count;    //用于判断是否查询完毕
+        foreach (XmlNode i in xnl)
+        {
+            XmlElement xe = (XmlElement)i;
+            if (xe.FirstChild.InnerText == id.Value.Trim())
+            {
+                classmy.Value = xe["class"].InnerText;
+                name.Value = xe["name"].InnerText;
+                sex.Value = xe["sex"].InnerText;
+                familyphone.Value = xe["familyphone"].InnerText;
+                mobilephone.Value = xe["mobilephone"].InnerText;
+                address.Value = xe["address"].InnerText;
+                enterDate.Value = xe["enterDate"].InnerText;
+                mark.Value = xe["mark"].InnerText;
+                //name.Style.Add("readonly", "readonly");
+                //name.Attributes.Add("readonly", "readonly"); //ok
+                break;
+            }
+            num--;
+            if (num.Equals(0))
+            {
+                Page.ClientScript.RegisterStartupScript(Page.GetType(), "msg", "<script language='javascript' defer>window.alert('没有该记录！')</script>");
+                classmy.Value=name.Value =sex.Value=  familyphone.Value=address.Value=enterDate.Value=mark.Value= "";
+            }
+        }
+    }
+}

@@ -1,0 +1,194 @@
+﻿use gunterMPLMS
+go
+if object_id('LinkmenInfo')>0
+drop table LinkmenInfo
+go
+create table LinkmenInfo
+(
+    ID int identity(1,1),
+    LinkmenID int primary key not null,  --编号
+    UserID varchar(50) not null,                 --用户名，外键
+    GroupKind varchar(50) not null,              --组别
+    LinkmanName varchar(50) null,                --联系人的姓名
+    WorkUnit  varchar(500),                      --工作单位
+    LinkNum varchar(200),                        --联系电话
+    Email varchar(200),                          --电子邮箱
+    PersonImage image  null,                      --个人头像
+   constraint FK_LINKMEN_USER foreign key
+   (
+      UserID
+   ) references UserInfo
+   (
+      UserID
+   )
+)
+go
+
+insert into LinkmenInfo(
+    LinkmenID,              --编号
+    UserID,                 --用户名，外键
+    GroupKind,              --组别
+    LinkmanName,            --联系人姓名
+    WorkUnit,               --工作单位
+    LinkNum,                --联系电话
+    Email,                  --电子邮箱
+    PersonImage)            --个人头像
+values(1,'gunter','Admin','小弟张震','长江大学工程技术学院','13508629550','814117018@qq.com','')
+insert into LinkmenInfo(
+    LinkmenID,              --编号
+    UserID,                 --用户名，外键
+    GroupKind,              --组别
+    LinkmanName,            --联系人姓名
+    WorkUnit,               --工作单位
+    LinkNum,                --联系电话
+    Email,                  --电子邮箱
+    PersonImage)            --个人头像
+values(2,'111','user','乐观阿三','长江大学工程技术学院','13508629552','8141170f8@qq.com','')
+insert into LinkmenInfo(
+    LinkmenID,              --编号
+    UserID,                 --用户名，外键
+    GroupKind,              --组别
+LinkmanName,                --联系人姓名
+    WorkUnit,               --工作单位
+    LinkNum,                --联系电话
+    Email,                  --电子邮箱
+    PersonImage)            --个人头像
+values(3,'111','user','消极李四','长江大学工程技术学院','13508629555','13414117018@qq.com','')
+insert into LinkmenInfo(
+    LinkmenID,              --编号
+    UserID,                 --用户名，外键
+    GroupKind,              --组别
+    LinkmanName,            --联系人姓名
+    WorkUnit,               --工作单位
+    LinkNum,                --联系电话
+    Email,                  --电子邮箱
+    PersonImage)            --个人头像
+values(4,'111','user','胖子赵五','长江大学工程技术学院','13508629555','33414117018@qq.com','')
+select * from linkmenInfo
+
+use gunterMPLMS
+GO
+if object_id('UserInfo')>0
+   drop table UserInfo
+go
+create table UserInfo
+(
+    ID int identity(1,1),
+    UserID varchar(50) primary key not null,
+    PassWord varchar(50) not null,
+    MAXlinkmenNum int default(10),
+    MaxGroupNum  int default(5),
+    RealName varchar(30) not null
+)
+go
+insert into UserInfo(UserID,PassWord,MAXlinkmenNum,MaxGroupNum,realName)
+values('gunter','gunter',20,10,'张强强')
+insert into UserInfo(UserID,PassWord,MAXlinkmenNum,MaxGroupNum,realName)
+values('111','111',10,5,'李四')
+
+
+use gunterMPLMS
+go
+if object_id('procViewUserInfo','P')>0
+   drop proc procViewUserInfo
+go
+
+create proc procViewUserInfo
+as
+begin
+	select * from UserInfo
+end
+go
+
+exec procViewUserInfo
+
+use gunterMPLMS
+go
+if object_id('procViewLinkmenInfo','P')>0
+   drop proc procViewLinkmenInfo
+go
+
+create proc procViewLinkmenInfo
+as
+begin
+	select * from LinkmenInfo
+end
+go
+exec procViewLinkmenInfo
+
+use gunterMPLMS
+go
+if object_id('procDelLinkmenInfo','P')>0
+   drop proc procDelLinkmenInfo
+go
+
+create proc procDelLinkmenInfo
+(
+   @LinkmenID int
+)
+as
+begin
+	delete from LinkmenInfo 
+    where LinkmenID=@LinkmenID
+end
+go
+exec procDelLinkmenInfo '4'
+select * from LinkmenInfo
+
+use gunterMPLMS
+go
+if object_id('procDelUserInfo','P')>0
+   drop proc procDelUserInfo
+go
+
+create proc procDelUserInfo
+(
+   @UserID varchar(50)
+)
+as
+begin
+	delete from UserInfo 
+    where UserID=@UserID
+end
+go
+exec procDelUserInfo '111'
+
+select * from UserInfo
+
+
+
+use gunterMPLMS
+go
+select * from UserInfo
+select * from LinkmenInfo
+
+set ANSI_NULLS ON
+set QUOTED_IDENTIFIER ON
+go
+
+
+alter proc [dbo].[procViewUserInfoByUserID]
+(
+ @UserID varchar(50)
+)
+as
+begin
+	select * from UserInfo
+    where UserID=@UserID
+end
+
+create proc [dbo].[procUpdateUserPasswordByUserID]
+(
+ @UserID varchar(50),
+ @PassWord varchar(50)
+)
+as
+begin
+   update UserInfo
+   set PassWord=@passWord
+   where UserID=@UserID
+end
+
+
+exec [procViewUserInfoByUserID] 'gunter'
+
